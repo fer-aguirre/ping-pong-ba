@@ -1,0 +1,45 @@
+project:
+  type: website
+  output-dir: docs
+
+format:
+  html:
+    toc: true
+    toc-title: Contents
+    toc-location: right
+    linkcolor: "green"
+    theme: 
+      - zephyr
+      - custom.scss
+website:
+  navbar:
+    search: true
+    logo: "./assets/logo.png"
+    title: Mesas de ping pong en lugares públicos de CABA
+    background: "primary"
+  sidebar:
+    style: "docked"
+    background: "success"
+    contents:
+    - href: index.qmd
+      text: Mapa
+    - text: "Datos"
+      url: ./pages/datos.qmd
+  page-footer: 
+    border: false
+    background: dark
+    foreground: "#ffffff"
+    left: >
+      Created by Fernanda Aguirre
+    center:
+      - icon: github
+        href: https://github.com/fer-aguirre
+      - icon: twitter 
+        href: https://twitter.com/feragru
+      - icon: linkedin
+        href: https://www.linkedin.com/in/feragru/
+      - icon: envelope
+        href: mailto:feraguirre@riseup.net
+    right: >
+        [Powered by Quarto](https://github.com/fer-aguirre/ping-pong-caba)
+

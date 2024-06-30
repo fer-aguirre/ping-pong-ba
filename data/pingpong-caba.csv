@@ -1,0 +1,32 @@
+plaza,direccion,comuna,coordenadas,lat,long,mesas
+Plaza Roma,"Av. Leandro N. Alem, Tucumán, Bouchard y Lavalle",Comuna 1,"-34.601172748394035, -58.3697350452525",-34.601172748394035,-58.3697350452525,3
+Plazoleta Cecilia Grierson,"Av. San Juan, Chacobuco y Piedras",Comuna 1,"-34.622098567928376, -58.374946358743706",-34.622098567928376,-58.374946358743706,3
+Plazoleta Beatriz Guido,Av. Paseo Colón y Cochabamba ,Comuna 1,"-34.622150935612694, -58.368669861819356",-34.622150935612694,-58.368669861819356,2
+Plaza Rodríguez Peña,"Callao 901, Marcelo Torcuato de Alvear, Rodríguez Peña y Paraguay",Comuna 2,"-34.59778379476911, -58.39221697408872",-34.59778379476911,-58.39221697408872,
+Parque de la Estación,Av. Díaz Velez y Tte. Gral. Juan Domingo Perón,Comuna 3,"-34.60789655493658, -58.41328032910255",-34.60789655493658,-58.41328032910255,1
+Plaza Martín Fierro,"La Rioja, Barcala y Gral. Urquiza",Comuna 3,"-34.62583581617448, -58.40774290292387",-34.62583581617448,-58.40774290292387,3
+Manzana 66,"Av. Belgrano, Av. Jujuy, Moreno y Catamarca",Comuna 3,"-34.61386324703691, -58.40576014710463",-34.61386324703691,-58.40576014710463,1
+Parque de los Patricios ,"Av. Caseros, Monteagudo y Pepirí",Comuna 4,"-34.637357228860196, -58.407152301151655",-34.637357228860196,-58.407152301151655,3
+Plazoleta Agustín Magaldi,"Av. Gral. Tomás de Iriarte, Río Cuarto y Arata, Pedro N.",Comuna 4,"-34.65196226511926, -58.39306670118871",-34.65196226511926,-58.39306670118871,2
+Plazoleta Miguel Unamuno,"Dr. Emilio R. Coni, Miguel de Unamuno, Wiliam C. Morris y Ponce, Anibal",Comuna 4,"-34.653257408332564, -58.39315402553162",-34.653257408332564,-58.39315402553162,1
+Plaza Almagro,"Sarmiento, Bulnes, Jerónimo Salguero y Tte. Gral. Juan Domingo Perón",Comuna 5,"-34.605768823302, -58.41908469447783",-34.605768823302,-58.41908469447783,3
+Plaza Caballito,"Rojas, Federico García Lorca y Yerbal",Comuna 6,"-34.619480390970935, -58.443442564418206",-34.619480390970935,-58.443442564418206,3
+Plaza Irlanda,"Av. Gaona, Neuquén, Tte. Gral. Juan Domingo Perón y Almte. F.J. Seguí",Comuna 6,"-34.61454738642014, -58.457878331760284",-34.61454738642014,-58.457878331760284,2
+Plazoleta Crisólogo Larralde,Rojas y Yerbal,Comuna 6,"-34.619341409958295, -58.4414776299076",-34.619341409958295,-58.4414776299076,
+Parque Chacabuco,"Av. Asamblea, Emilio Mitre y Av. Eva Perón",Comuna 7,"-34.632096554951254, -58.44231703175966",-34.632096554951254,-58.44231703175966,
+Plazoleta Soldado de la Frontera 5001,,Comuna 8,"-34.683049861841546, -58.46570798123302",-34.683049861841546,-58.46570798123302,3
+Plazoleta Skanderberg De los Milagros,"Cristóbal M. Hicken, Ricardo Güiraldes y Crisóstomo Álvarez",Comuna 8,"-34.66794338434008, -58.481622674086175",-34.66794338434008,-58.481622674086175,2
+Parque Alberdi,Av. Directorio y Av. Lisandro de la Torre,Comuna 9,"-34.65898812291362, -58.50064156059472",-34.65898812291362,-58.50064156059472,3
+Plaza Las Toscaneras,,Comuna 10,,,,2
+Plaza Corralón de Floresta,Av. Gaona y Gualeguaychú,Comuna 10,"-34.62705128892929, -58.48847838943201",-34.62705128892929,-58.48847838943201,1
+Plaza Arenales,"Mercedes, Bahía Blanca, Nueva York y Pareja",Comuna 11,"-34.599517446330466, -58.51220094525249",-34.599517446330466,-58.51220094525249,
+Plaza Aristóbulo del Valle,"Campana, Baigorria, Pl. Aristóbulo del valle y Cuenca",Comuna 11,"-34.605777225469915, -58.49300598838266",-34.605777225469915,-58.49300598838266,
+Parque General Paz,"Av. Gral. Paz, Av. Juan Bautista de la Salle, Crisólogo Larralde y Aizpurúa",Comuna 12,"-34.56594890988173, -58.50565601641775",-34.56594890988173,-58.50565601641775,
+Parque Saavedra,Vilela y Av. García del Río,Comuna 12,"-34.550651079014045, -58.4794615513365",-34.550651079014045,-58.4794615513365,4
+Plaza Francisco Ramírez,"Manuela Pedraza, José Pascual Tamborini y Av. Crámer",Comuna 13,"-34.55375367599749, -58.468947664418025",-34.55375367599749,-58.468947664418025,1
+Plaza de proximidad Cramer,Crámer y Amenábar,Comuna 13,"-34.57445989687471, -58.44473209920542",-34.57445989687471,-58.44473209920542,4
+Plaza Inmigrantes de Armenia,"Malabia, Costa Rica, Armenia, Nicaragua",Comuna 14,"-34.58866874256044, -58.425148477909865",-34.58866874256044,-58.425148477909865,1
+Parque Las Heras,"Gral. Las Heras, Av. Cnel. Díaz, Av Juncal  y Jerónimo Salguero",Comuna 14,"-34.583747044829046, -58.408531495515604",-34.583747044829046,-58.408531495515604,6
+Plaza Unidad Latinoamericana,"Medrano, El Salvador, Costa Rica y Francisco Acuña de Figueroa",Comuna 14,"-34.59202705890859, -58.41958698758077",-34.59202705890859,-58.41958698758077,2
+Giribone y Céspedes,,Comuna 15,"-34.58038303338081, -58.4555639067459",-34.58038303338081,-58.4555639067459,2
+Parque Elcano,,Comuna 15,"-34.58653361368478, -58.46232879478041",-34.58653361368478,-58.46232879478041,1

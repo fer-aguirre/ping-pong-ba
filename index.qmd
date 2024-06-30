@@ -1,0 +1,36 @@
+---
+title: "Mesas de ping pong en CABA 🏓"
+format: 
+  html:
+    page-layout: full
+    editor: visual
+---
+
+```{python}
+import pandas as pd
+import folium
+from folium import plugins
+from folium.features import CustomIcon, FeatureGroup
+
+# Load the data
+data = pd.read_csv('./data/pingpong-caba.csv')
+
+# Create a map centered at the mean of long and lat values
+m = folium.Map(location=[data['lat'].mean(), data['long'].mean()], zoom_start=12)
+
+# Add layer 
+folium.TileLayer(tiles="Stadia StamenWatercolor", name="Mesas de ping pong en CABA", attr= '''
+            &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> 
+            contributors &copy; <a href="https://carto.com/attributions">CARTO</a>''').add_to(m)
+
+
+# Remove rows with NaN values in 'long' and 'lat' columns
+data = data.dropna(subset=['lat', 'long'])
+
+# Add points to the map
+for idx, row in data.iterrows():
+    folium.Marker([row['lat'], row['long']]).add_to(m)
+
+# Display the map
+m
+```

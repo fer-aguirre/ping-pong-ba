@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Mesas de ping pong en CABA 🏓",
+    "section": "",
+    "text": "import pandas as pd\nimport folium\nfrom folium import plugins\nfrom folium.features import CustomIcon, FeatureGroup\n\n# Load the data\ndata = pd.read_csv('./data/pingpong-caba.csv')\n\n# Create a map centered at the mean of long and lat values\nm = folium.Map(location=[data['lat'].mean(), data['long'].mean()], zoom_start=12)\n\n# Add layer \nfolium.TileLayer(tiles=\"Stadia StamenWatercolor\", name=\"Mesas de ping pong en CABA\", attr= '''\n            &copy; &lt;a href=\"https://www.openstreetmap.org/copyright\"&gt;OpenStreetMap&lt;/a&gt; \n            contributors &copy; &lt;a href=\"https://carto.com/attributions\"&gt;CARTO&lt;/a&gt;''').add_to(m)\n\n\n# Remove rows with NaN values in 'long' and 'lat' columns\ndata = data.dropna(subset=['lat', 'long'])\n\n# Add points to the map\nfor idx, row in data.iterrows():\n    folium.Marker([row['lat'], row['long']]).add_to(m)\n\n# Display the map\nm\n\nMake this Notebook Trusted to load map: File -&gt; Trust Notebook"
+  }
+]
