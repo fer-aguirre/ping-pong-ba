@@ -93,9 +93,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
 
 </head>
@@ -111,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <img src="././assets/logo.png" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Mesas de ping pong en lugares públicos de CABA</span>
+    <span class="navbar-title">Mesas de ping pong en CABA</span>
     </a>
   </div>
         <div class="quarto-navbar-tools ms-auto">
@@ -176,301 +175,232 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> folium</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> folium <span class="im">import</span> plugins</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> folium.features <span class="im">import</span> CustomIcon, FeatureGroup</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'./data/pingpong-caba.csv'</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a map centered at the mean of long and lat values</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> folium.Map(location<span class="op">=</span>[data[<span class="st">'lat'</span>].mean(), data[<span class="st">'long'</span>].mean()], zoom_start<span class="op">=</span><span class="dv">12</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add layer </span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>folium.TileLayer(tiles<span class="op">=</span><span class="st">"Stadia StamenWatercolor"</span>, name<span class="op">=</span><span class="st">"Mesas de ping pong en CABA"</span>, attr<span class="op">=</span> <span class="st">'''</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="st">            &amp;copy; &lt;a href="https://www.openstreetmap.org/copyright"&gt;OpenStreetMap&lt;/a&gt; </span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">            contributors &amp;copy; &lt;a href="https://carto.com/attributions"&gt;CARTO&lt;/a&gt;'''</span>).add_to(m)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove rows with NaN values in 'long' and 'lat' columns</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.dropna(subset<span class="op">=</span>[<span class="st">'lat'</span>, <span class="st">'long'</span>])</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add points to the map</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, row <span class="kw">in</span> data.iterrows():</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    folium.Marker([row[<span class="st">'lat'</span>], row[<span class="st">'long'</span>]]).add_to(m)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the map</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="27">
-<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -&gt; Trust Notebook</span><iframe srcdoc="<!DOCTYPE html>
-<html>
-<head>
-    
-    <meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; />
-    
-        <script>
-            L_NO_TOUCH = false;
-            L_DISABLE_3D = false;
-        </script>
-    
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;></script>
-    <script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;></script>
-    <script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;></script>
-    <script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;></script>
-    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/>
-    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/>
-    <link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/>
-    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/>
-    <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/>
-    <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/>
-    
-            <meta name=&quot;viewport&quot; content=&quot;width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; />
-            <style>
-                #map_50875b9897129757f571a24223ae35fb {
-                    position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
-                    left: 0.0%;
-                    top: 0.0%;
-                }
-                .leaflet-container { font-size: 1rem; }
-            </style>
-        
-</head>
-<body>
-    
-    
-            <div class=&quot;folium-map&quot; id=&quot;map_50875b9897129757f571a24223ae35fb&quot; ></div>
-        
-</body>
-<script>
-    
-    
-            var map_50875b9897129757f571a24223ae35fb = L.map(
-                &quot;map_50875b9897129757f571a24223ae35fb&quot;,
-                {
-                    center: [-34.611437117257445, -58.43805131440408],
-                    crs: L.CRS.EPSG3857,
-                    zoom: 12,
-                    zoomControl: true,
-                    preferCanvas: false,
-                }
-            );
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="14" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 13;"><span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>dataURL <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/fer-aguirre/ping-pong-caba/main/data/pingpong-caba.csv"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">fetch</span>(dataURL)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>response<span class="op">.</span><span class="at">ok</span>) <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(response<span class="op">.</span><span class="at">status</span>)<span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> response<span class="op">.</span><span class="fu">text</span>()<span class="op">;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
 
-            
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="expression">
 
-        
-    
-            var tile_layer_5069ccd12705f60e9067b9452c8c70eb = L.tileLayer(
-                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
-                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            );
-        
-    
-            tile_layer_5069ccd12705f60e9067b9452c8c70eb.addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var tile_layer_b79bb95e7af7dd3b0da7646350d5a48c = L.tileLayer(
-                &quot;https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg&quot;,
-                {&quot;attribution&quot;: &quot;\n            \u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e \n            contributors \u0026copy; \u003ca href=\&quot;https://carto.com/attributions\&quot;\u003eCARTO\u003c/a\u003e&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 16, &quot;maxZoom&quot;: 16, &quot;minZoom&quot;: 1, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
-            );
-        
-    
-            tile_layer_b79bb95e7af7dd3b0da7646350d5a48c.addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_d42429cccee49f9010ec88cbdb11b9c4 = L.marker(
-                [-34.601172748394035, -58.3697350452525],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_f316504de86b1aeceb6dea7a0e8c1ca1 = L.marker(
-                [-34.622098567928376, -58.374946358743706],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_426cc2c55814c6f46667c7aaf66a327b = L.marker(
-                [-34.622150935612694, -58.36866986181936],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_a08c6e7939f02ffdcf28b1eb4f10dc59 = L.marker(
-                [-34.59778379476911, -58.39221697408872],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_0d1e782a776d432e5d5dbb343e5004de = L.marker(
-                [-34.60789655493658, -58.41328032910255],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_5df8672d8459ec3ef26bae723f734679 = L.marker(
-                [-34.62583581617448, -58.40774290292387],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_9688d939c66fe5dea9a421bf863d83e2 = L.marker(
-                [-34.61386324703691, -58.40576014710463],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_f538aae04a8dc7b99985e56cc6f52eb5 = L.marker(
-                [-34.6373572288602, -58.407152301151655],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_573d27110c128fb633eb59276dea2d80 = L.marker(
-                [-34.65196226511926, -58.39306670118871],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_8ed5e68e73194fc6253583ad8ec2fc0b = L.marker(
-                [-34.653257408332564, -58.39315402553162],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_7df9211d38d1901ad0b226f284b2ce1c = L.marker(
-                [-34.605768823302, -58.41908469447783],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_a5b5237ea236a77f31e14d483d413ea4 = L.marker(
-                [-34.619480390970935, -58.443442564418206],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_f230f1cfece68a14c23029df67d46174 = L.marker(
-                [-34.61454738642014, -58.45787833176029],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_490ca5c06dedb467ccfd1809123e3800 = L.marker(
-                [-34.619341409958295, -58.4414776299076],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_fe72e9b728801c60b9852e565074005c = L.marker(
-                [-34.632096554951254, -58.44231703175966],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_801af62d17cb3230ca5b506bc7272e03 = L.marker(
-                [-34.683049861841546, -58.46570798123302],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_80a4cd27b5ebc8cdc03021c1e1cbb5fd = L.marker(
-                [-34.66794338434008, -58.481622674086175],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_13a7a6634d7d7f013128eeaabc826248 = L.marker(
-                [-34.65898812291362, -58.50064156059472],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_d2d4d56b36d7a843c7fc5a370749046a = L.marker(
-                [-34.62705128892929, -58.48847838943201],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_2a43e34f62571bce8800bbb2d1ffd753 = L.marker(
-                [-34.599517446330466, -58.51220094525249],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_522148c66d6509c6f3979a0ebd171337 = L.marker(
-                [-34.605777225469915, -58.49300598838266],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_353a293fe5507f3807896f6e7c1437b9 = L.marker(
-                [-34.56594890988173, -58.50565601641775],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_ad274d457f70be81aca1bd2bdb10bd12 = L.marker(
-                [-34.550651079014045, -58.4794615513365],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_63e6191ff0d489d08e5cfb3aab23d429 = L.marker(
-                [-34.55375367599749, -58.468947664418025],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_97da649fda3fb64ddc4ced4bf1fca908 = L.marker(
-                [-34.57445989687471, -58.44473209920542],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_ea97c88de4ece1be4682ee2b1692c5ba = L.marker(
-                [-34.58866874256044, -58.425148477909865],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_52db96de0d7616fb023698d8f8fe49df = L.marker(
-                [-34.583747044829046, -58.4085314955156],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_ab8c797fea3d4ce7b5544ddce9543cf7 = L.marker(
-                [-34.59202705890859, -58.41958698758077],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_3700ad413dc3d625039d9c1106ed34c7 = L.marker(
-                [-34.58038303338081, -58.4555639067459],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-    
-            var marker_55e4481f44d9520471d4d9320079d872 = L.marker(
-                [-34.58653361368478, -58.46232879478041],
-                {}
-            ).addTo(map_50875b9897129757f571a24223ae35fb);
-        
-</script>
-</html>" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen=""></iframe></div></div>
+</div>
+</div>
+</div>
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="22" data-source-offset="-231"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 21;"><span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> d3<span class="op">.</span><span class="fu">csv</span>(dataURL)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>barrio_geo <span class="op">=</span> <span class="cf">await</span> <span class="fu">FileAttachment</span>(<span class="st">"./data/ba_barrios.geo.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>zone_geo <span class="op">=</span> <span class="cf">await</span> <span class="fu">FileAttachment</span>(<span class="st">"./data/zonas.geo.json"</span>)<span class="op">.</span><span class="fu">json</span>()</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">'d3@5'</span><span class="op">,</span> <span class="st">'d3-array@^2.2'</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {select} <span class="im">from</span> <span class="st">"@jashkenas/inputs"</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {svgGradientDefs} <span class="im">from</span> <span class="st">"@luciyer/svg-gradients-chrome-safari"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display hidden">
+<div>
+<div id="ojs-cell-1-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="39" data-source-offset="-1"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 38;"><span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>viewof barrio_overlay <span class="op">=</span> <span class="fu">select</span>([<span class="st">"Mostrar barrios"</span><span class="op">,</span> <span class="st">"Ocultar barrios"</span>])</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>map <span class="op">=</span> {</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> style <span class="op">=</span> {</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="dt">height</span><span class="op">:</span> <span class="dv">600</span><span class="op">,</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="dt">margin</span><span class="op">:</span> <span class="dv">20</span><span class="op">,</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="dt">barrio_stroke</span><span class="op">:</span> <span class="st">"#000"</span><span class="op">,</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="dt">barrio_stroke_width</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    <span class="dt">barrio_stroke_opacity</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="dt">zone_stroke</span><span class="op">:</span> <span class="st">"#BBB"</span><span class="op">,</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="dt">zone_stroke_width</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="dt">zone_stroke_opacity</span><span class="op">:</span> <span class="dv">1</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> projection <span class="op">=</span> d3<span class="op">.</span><span class="fu">geoMercator</span>()</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">fitSize</span>([width <span class="op">-</span> style<span class="op">.</span><span class="at">margin</span> <span class="op">*</span> <span class="dv">2</span><span class="op">,</span> </span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                style<span class="op">.</span><span class="at">height</span> <span class="op">-</span> style<span class="op">.</span><span class="at">margin</span> <span class="op">*</span> <span class="dv">2</span>]<span class="op">,</span> barrio_geo)<span class="op">;</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3<span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> width<span class="op">,</span> style<span class="op">.</span><span class="at">height</span>])</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">'width'</span><span class="op">,</span> width)</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">'height'</span><span class="op">,</span> style<span class="op">.</span><span class="at">height</span>)<span class="op">;</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> zone_map <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">'g'</span>)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"zone-map"</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>style<span class="op">.</span><span class="at">margin</span><span class="sc">}</span><span class="vs">, </span><span class="sc">${</span>style<span class="op">.</span><span class="at">margin</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> tooltip <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">"body"</span>)<span class="op">.</span><span class="fu">append</span>(<span class="st">"div"</span>)</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"svg-tooltip"</span>)</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"position"</span><span class="op">,</span> <span class="st">"absolute"</span>)</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"visibility"</span><span class="op">,</span> <span class="st">"hidden"</span>)</span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"font-size"</span><span class="op">,</span> <span class="st">"1rem"</span>)</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"background"</span><span class="op">,</span> <span class="st">"rgba(255,255,255, 2555)"</span>)</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"padding"</span><span class="op">,</span> <span class="st">"0.1rem 0.5rem"</span>)</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"color"</span><span class="op">,</span> <span class="st">"#000"</span>)</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"border-radius"</span><span class="op">,</span> <span class="st">"3px"</span>)</span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"border"</span><span class="op">,</span> <span class="st">"1px solid #000"</span>)<span class="op">;</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> mousemove <span class="op">=</span> () <span class="kw">=&gt;</span> tooltip</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"top"</span><span class="op">,</span> (d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">pageY</span><span class="op">-</span><span class="dv">10</span>)<span class="op">+</span><span class="st">"px"</span>)</span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"left"</span><span class="op">,</span>(d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">pageX</span><span class="op">+</span><span class="dv">20</span>)<span class="op">+</span><span class="st">"px"</span>)<span class="op">;</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> mouseout <span class="op">=</span> <span class="kw">function</span> (d) { </span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>    tooltip<span class="op">.</span><span class="fu">style</span>(<span class="st">"visibility"</span><span class="op">,</span> <span class="st">"hidden"</span>)<span class="op">;</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"#FFF"</span>)<span class="op">;</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>  zone_map<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"path"</span>)</span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">data</span>(zone_geo<span class="op">.</span><span class="at">features</span>)</span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">enter</span>() </span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">append</span>(<span class="st">"path"</span>) </span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"#FFF"</span>) </span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke"</span><span class="op">,</span> style<span class="op">.</span><span class="at">zone_stroke</span>) </span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-opacity"</span><span class="op">,</span> style<span class="op">.</span><span class="at">zone_stroke_opacity</span>)</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-width"</span><span class="op">,</span> style<span class="op">.</span><span class="at">zone_stroke_width</span>)</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"d"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">geoPath</span>()<span class="op">.</span><span class="fu">projection</span>(projection))</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">on</span>(<span class="st">"mousemove"</span><span class="op">,</span> mousemove)</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">on</span>(<span class="st">"mouseout"</span><span class="op">,</span> mouseout)<span class="op">;</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(barrio_overlay <span class="op">===</span> <span class="st">"Mostrar barrios"</span>) {</span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> barrio_map <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"barrio-map"</span>)</span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>style<span class="op">.</span><span class="at">margin</span><span class="sc">}</span><span class="vs">, </span><span class="sc">${</span>style<span class="op">.</span><span class="at">margin</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>    barrio_map<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"path"</span>)</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">data</span>(barrio_geo<span class="op">.</span><span class="at">features</span>)</span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">enter</span>() </span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">append</span>(<span class="st">"path"</span>) </span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> <span class="st">"none"</span>) </span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke"</span><span class="op">,</span> style<span class="op">.</span><span class="at">barrio_stroke</span>) </span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-opacity"</span><span class="op">,</span> style<span class="op">.</span><span class="at">barrio_stroke_opacity</span>)</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">attr</span>(<span class="st">"stroke-width"</span><span class="op">,</span> style<span class="op">.</span><span class="at">barrio_stroke_width</span>)</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">attr</span>(<span class="st">"d"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">geoPath</span>()<span class="op">.</span><span class="fu">projection</span>(projection))<span class="op">;</span> </span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> points <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"points"</span>)</span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>style<span class="op">.</span><span class="at">margin</span><span class="sc">}</span><span class="vs">, </span><span class="sc">${</span>style<span class="op">.</span><span class="at">margin</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a>  points<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"image"</span>)</span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>(data)</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">enter</span>()</span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">append</span>(<span class="st">"image"</span>)</span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"xlink:href"</span><span class="op">,</span> <span class="st">"https://github.com/fer-aguirre/ping-pong-caba/blob/main/assets/logo.png?raw=true"</span>) </span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">projection</span>([d<span class="op">.</span><span class="at">long</span><span class="op">,</span> d<span class="op">.</span><span class="at">lat</span>])[<span class="dv">0</span>]<span class="op">;</span> })</span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="kw">function</span>(d) { <span class="cf">return</span> <span class="fu">projection</span>([d<span class="op">.</span><span class="at">long</span><span class="op">,</span> d<span class="op">.</span><span class="at">lat</span>])[<span class="dv">1</span>]<span class="op">;</span> })</span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"width"</span><span class="op">,</span> <span class="st">"20px"</span>)</span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"height"</span><span class="op">,</span> <span class="st">"20px"</span>)</span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">"opacity"</span><span class="op">,</span> <span class="dv">1</span>)</span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">on</span>(<span class="st">"click"</span><span class="op">,</span> <span class="kw">function</span> (d) { </span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (d<span class="op">.</span><span class="at">google_maps</span>) <span class="bu">window</span><span class="op">.</span><span class="fu">open</span>(d<span class="op">.</span><span class="at">google_maps</span><span class="op">,</span> <span class="st">'_blank'</span>)<span class="op">;</span></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">on</span>(<span class="st">"mouseover"</span><span class="op">,</span> <span class="kw">function</span> (d) { </span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a>      <span class="kw">let</span> tooltipText <span class="op">=</span> <span class="st">"&lt;b&gt;"</span> <span class="op">+</span> d<span class="op">.</span><span class="at">plaza</span> <span class="op">+</span> <span class="st">"&lt;/b&gt;&lt;br&gt;&lt;i&gt;Haz clic para abrir la ubicación en Google Maps&lt;/i&gt;"</span><span class="op">;</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (d<span class="op">.</span><span class="at">direccion</span>) tooltipText <span class="op">+=</span> <span class="st">"&lt;br&gt;Dirección: "</span> <span class="op">+</span> d<span class="op">.</span><span class="at">direccion</span><span class="op">;</span></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (d<span class="op">.</span><span class="at">comuna</span>) tooltipText <span class="op">+=</span> <span class="st">"&lt;br&gt;"</span> <span class="op">+</span> d<span class="op">.</span><span class="at">comuna</span><span class="op">;</span></span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (d<span class="op">.</span><span class="at">mesas</span>) tooltipText <span class="op">+=</span> <span class="st">"&lt;br&gt;Mesas: "</span> <span class="op">+</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(d<span class="op">.</span><span class="at">mesas</span>)<span class="op">;</span></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a>      tooltip</span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">style</span>(<span class="st">"visibility"</span><span class="op">,</span> <span class="st">"visible"</span>)</span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">html</span>(tooltipText)<span class="op">;</span></span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>      d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">style</span>(<span class="st">"opacity"</span><span class="op">,</span> <span class="fl">0.5</span>)<span class="op">;</span></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">on</span>(<span class="st">"mousemove"</span><span class="op">,</span> mousemove)</span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">on</span>(<span class="st">"mouseout"</span><span class="op">,</span> <span class="kw">function</span> (d) { </span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a>      tooltip<span class="op">.</span><span class="fu">style</span>(<span class="st">"visibility"</span><span class="op">,</span> <span class="st">"hidden"</span>)<span class="op">;</span></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a>      d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)</span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">style</span>(<span class="st">"opacity"</span><span class="op">,</span> <span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-2" data-nodetype="declaration">
+
+</div>
+</div>
 </div>
 </div>
 
 
 
 </main> <!-- /main -->
+<script type="ojs-module-contents">
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\ndataURL = \"https://raw.githubusercontent.com/fer-aguirre/ping-pong-caba/main/data/pingpong-caba.csv\"\n\nfetch(dataURL)\n  .then(response => {\n    if (!response.ok) throw new Error(response.status);\n    return response.text();\n  });\n\ndata = d3.csv(dataURL)\n\nbarrio_geo = await FileAttachment(\"./data/ba_barrios.geo.json\").json()\n\nzone_geo = await FileAttachment(\"./data/zonas.geo.json\").json()\n\nd3 = require('d3@5', 'd3-array@^2.2')\n\nimport {select} from \"@jashkenas/inputs\"\n\nimport {svgGradientDefs} from \"@luciyer/svg-gradients-chrome-safari\"\n\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"\nviewof barrio_overlay = select([\"Mostrar barrios\", \"Ocultar barrios\"])\n\nmap = {\n  \n  var style = {\n    height: 600,\n    margin: 20,\n    barrio_stroke: \"#000\",\n    barrio_stroke_width: 1,\n    barrio_stroke_opacity: 1,\n    zone_stroke: \"#BBB\",\n    zone_stroke_width: 0.5,\n    zone_stroke_opacity: 1\n  };\n  \n  let projection = d3.geoMercator()\n      .fitSize([width - style.margin * 2, \n                style.height - style.margin * 2], barrio_geo);\n  \n  const svg = d3.create(\"svg\")\n    .attr(\"viewBox\", [0, 0, width, style.height])\n    .attr('width', width)\n    .attr('height', style.height);\n\n\n  const zone_map = svg.append('g')\n    .attr(\"class\", \"zone-map\")\n    .attr(\"transform\", `translate(${style.margin}, ${style.margin})`);\n  \n  const tooltip = d3.select(\"body\").append(\"div\")\n    .attr(\"class\", \"svg-tooltip\")\n    .style(\"position\", \"absolute\")\n    .style(\"visibility\", \"hidden\")\n    .style(\"font-size\", \"1rem\")\n    .style(\"background\", \"rgba(255,255,255, 2555)\")\n    .style(\"padding\", \"0.1rem 0.5rem\")\n    .style(\"color\", \"#000\")\n    .style(\"border-radius\", \"3px\")\n    .style(\"border\", \"1px solid #000\");\n  \n  let mousemove = () => tooltip\n    .style(\"top\", (d3.event.pageY-10)+\"px\")\n    .style(\"left\",(d3.event.pageX+20)+\"px\");\n  \n  let mouseout = function (d) { \n    tooltip.style(\"visibility\", \"hidden\");\n    d3.select(this).style(\"fill\", \"#FFF\");\n  }\n  \n  zone_map.append(\"g\")\n    .selectAll(\"path\")\n      .data(zone_geo.features)\n      .enter() \n      .append(\"path\") \n        .attr(\"fill\", \"#FFF\") \n        .attr(\"stroke\", style.zone_stroke) \n        .attr(\"stroke-opacity\", style.zone_stroke_opacity)\n        .attr(\"stroke-width\", style.zone_stroke_width)\n        .attr(\"d\", d3.geoPath().projection(projection))\n        .on(\"mousemove\", mousemove)\n        .on(\"mouseout\", mouseout);\n  \n  if(barrio_overlay === \"Mostrar barrios\") {\n    \n    let barrio_map = svg.append(\"g\")\n      .attr(\"class\", \"barrio-map\")\n      .attr(\"transform\", `translate(${style.margin}, ${style.margin})`);\n\n    barrio_map.append(\"g\")\n      .selectAll(\"path\")\n        .data(barrio_geo.features)\n        .enter() \n        .append(\"path\") \n          .attr(\"fill\", \"none\") \n          .attr(\"stroke\", style.barrio_stroke) \n          .attr(\"stroke-opacity\", style.barrio_stroke_opacity)\n          .attr(\"stroke-width\", style.barrio_stroke_width)\n          .attr(\"d\", d3.geoPath().projection(projection)); \n    \n  }\n  \n  let points = svg.append(\"g\")\n    .attr(\"class\", \"points\")\n    .attr(\"transform\", `translate(${style.margin}, ${style.margin})`);\n  \n  points.selectAll(\"image\")\n    .data(data)\n    .enter()\n    .append(\"image\")\n      .attr(\"xlink:href\", \"https://github.com/fer-aguirre/ping-pong-caba/blob/main/assets/logo.png?raw=true\") \n      .attr(\"x\", function(d) { return projection([d.long, d.lat])[0]; })\n      .attr(\"y\", function(d) { return projection([d.long, d.lat])[1]; })\n      .attr(\"width\", \"20px\")\n      .attr(\"height\", \"20px\")\n    .style(\"opacity\", 1)\n    .on(\"click\", function (d) { \n      if (d.google_maps) window.open(d.google_maps, '_blank');\n    })\n    .on(\"mouseover\", function (d) { \n      let tooltipText = \"<b>\" + d.plaza + \"</b><br><i>Haz clic para abrir la ubicación en Google Maps</i>\";\n      if (d.direccion) tooltipText += \"<br>Dirección: \" + d.direccion;\n      if (d.comuna) tooltipText += \"<br>\" + d.comuna;\n      if (d.mesas) tooltipText += \"<br>Mesas: \" + Math.round(d.mesas);\n      tooltip\n        .style(\"visibility\", \"visible\")\n        .html(tooltipText);\n      d3.select(this)\n        .style(\"opacity\", 0.5);\n    })\n    .on(\"mousemove\", mousemove)\n    .on(\"mouseout\", function (d) { \n      tooltip.style(\"visibility\", \"hidden\");\n      d3.select(this)\n        .style(\"opacity\", 1);\n    });\n\n  return svg.node();\n  \n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('barrio_overlay')"}]}
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

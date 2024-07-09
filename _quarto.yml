@@ -15,7 +15,7 @@ website:
   navbar:
     search: true
     logo: "./assets/logo.png"
-    title: Mesas de ping pong en lugares públicos de CABA
+    title: Mesas de ping pong en CABA
     background: "primary"
   sidebar:
     style: "docked"
