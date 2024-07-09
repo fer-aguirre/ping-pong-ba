@@ -6,13 +6,12 @@ format:
     editor: visual
 ---
 
-Los datos contienen información sobre lugares públicos con mesas de ping pong en la Ciudad Autónoma de Buenos Aires. La base fue construida manualmente utilizando información del sitio oficial del Gobierno de la Ciudad de Buenos Aires:
+Los datos contienen información sobre lugares públicos con mesas de ping pong en la Ciudad Autónoma de Buenos Aires. La base fue construida manualmente a partir de noticias del sitio oficial del Gobierno de la Ciudad de Buenos Aires:
 
 - [Las mesas de ping-pong, furor entre los oficinistas en la hora del almuerzo](https://buenosaires.gob.ar/laciudad/noticias/las-mesas-de-ping-pong-de-la-ciudad-furor-entre-los-oficinistas-en-la-hora-del)
 - [Nuevas áreas para practicar deporte en la Ciudad](https://buenosaires.gob.ar/noticias/nuevas-areas-para-practicar-deporte-en-la-ciudad)
 
-
-Si tienes información adicional, correcciones a la información ya existente o nuevos datos que podrían ser útiles para la base de datos, no dudes en ponerte en contacto conmigo. Tu contribución será valiosa para mejorar este proyecto.
+Si tienes información adicional, correcciones o nuevos datos que podrían ser útiles, no dudes en ponerte en contacto conmigo. Tu contribución será valiosa para mejorar este proyecto.
 
 ## Datos
 

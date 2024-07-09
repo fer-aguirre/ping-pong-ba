@@ -15,7 +15,7 @@ website:
   navbar:
     search: true
     logo: "./assets/logo.png"
-    title: Mesas de ping pong en CABA
+    title: Ping Pong en CABA
     background: "primary"
   sidebar:
     style: "docked"
