@@ -38,7 +38,7 @@ import {svgGradientDefs} from "@luciyer/svg-gradients-chrome-safari"
 
 viewof barrio_overlay = select(["Mostrar barrios", "Ocultar barrios"])
 
- map = {
+map = {
   
   var style = {
     height: 600,
@@ -82,6 +82,8 @@ viewof barrio_overlay = select(["Mostrar barrios", "Ocultar barrios"])
   let mouseout = function (d) {
     d3.select(this).style("opacity", 1);
   }
+  
+  let currentElement = null;
   
   zone_map.append("g")
     .selectAll("path")
@@ -130,20 +132,27 @@ viewof barrio_overlay = select(["Mostrar barrios", "Ocultar barrios"])
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
     .on("click", function (d) { 
-      let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
-      if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
-      if (d.comuna) tooltipText += "<br>" + d.comuna;
-      if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
-      tooltip
-        .style("visibility", "visible")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("left", (d3.event.pageX + 10) + "px")
-        .html(tooltipText);
-      d3.select(this)
-        .style("opacity", 1);
+      if (currentElement === this) {
+        tooltip.style("visibility", "hidden");
+        currentElement = null;
+      } else {
+        let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
+        if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
+        if (d.comuna) tooltipText += "<br>" + d.comuna;
+        if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
+        tooltip
+          .style("visibility", "visible")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("left", (d3.event.pageX + 10) + "px")
+          .html(tooltipText);
+        d3.select(this)
+          .style("opacity", 1);
+        currentElement = this;
+      }
     });
 
   return svg.node();
   
 }
+
 ```
