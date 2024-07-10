@@ -38,7 +38,7 @@ import {svgGradientDefs} from "@luciyer/svg-gradients-chrome-safari"
 
 viewof barrio_overlay = select(["Mostrar barrios", "Ocultar barrios"])
 
-map = {
+ map = {
   
   var style = {
     height: 600,
@@ -60,7 +60,6 @@ map = {
     .attr('width', width)
     .attr('height', style.height);
 
-
   const zone_map = svg.append('g')
     .attr("class", "zone-map")
     .attr("transform", `translate(${style.margin}, ${style.margin})`);
@@ -76,13 +75,12 @@ map = {
     .style("border-radius", "3px")
     .style("border", "1px solid #000");
   
-  let mousemove = () => tooltip
-    .style("top", (d3.event.pageY-10)+"px")
-    .style("left",(d3.event.pageX+20)+"px");
-  
-  let mouseout = function (d) { 
-    tooltip.style("visibility", "hidden");
-    d3.select(this).style("fill", "#FFF");
+  let mouseover = function (d) {
+    d3.select(this).style("opacity", 0.5);
+  }
+
+  let mouseout = function (d) {
+    d3.select(this).style("opacity", 1);
   }
   
   zone_map.append("g")
@@ -94,9 +92,7 @@ map = {
         .attr("stroke", style.zone_stroke) 
         .attr("stroke-opacity", style.zone_stroke_opacity)
         .attr("stroke-width", style.zone_stroke_width)
-        .attr("d", d3.geoPath().projection(projection))
-        .on("mousemove", mousemove)
-        .on("mouseout", mouseout);
+        .attr("d", d3.geoPath().projection(projection));
   
   if(barrio_overlay === "Mostrar barrios") {
     
@@ -131,23 +127,18 @@ map = {
       .attr("width", "20px")
       .attr("height", "20px")
     .style("opacity", 1)
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
     .on("click", function (d) { 
-      if (d.google_maps) window.open(d.google_maps, '_blank');
-    })
-    .on("mouseover", function (d) { 
-      let tooltipText = "<b>" + d.plaza + "</b><br><i>Haz clic para abrir la ubicación en Google Maps</i>";
+      let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
       if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
       if (d.comuna) tooltipText += "<br>" + d.comuna;
       if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
       tooltip
         .style("visibility", "visible")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("left", (d3.event.pageX + 10) + "px")
         .html(tooltipText);
-      d3.select(this)
-        .style("opacity", 0.5);
-    })
-    .on("mousemove", mousemove)
-    .on("mouseout", function (d) { 
-      tooltip.style("visibility", "hidden");
       d3.select(this)
         .style("opacity", 1);
     });

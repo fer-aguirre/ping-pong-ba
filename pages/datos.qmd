@@ -27,7 +27,10 @@ fetch(dataURL)
     return response.text();
   });
 
+d3 = require('d3')
+
 data = d3.csv(dataURL)
+
 ```
 
 ```{ojs}
