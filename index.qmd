@@ -58,7 +58,14 @@ map = {
   const svg = d3.create("svg")
     .attr("viewBox", [0, 0, width, style.height])
     .attr('width', width)
-    .attr('height', style.height);
+    .attr('height', style.height)
+    .on("click", function() {
+      tooltip.style("visibility", "hidden");
+      if (currentElement) {
+        d3.select(currentElement).style("opacity", 1);
+        currentElement = null;
+      }
+    });
 
   const zone_map = svg.append('g')
     .attr("class", "zone-map")
@@ -132,27 +139,27 @@ map = {
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
     .on("click", function (d) { 
-      if (currentElement === this) {
-        tooltip.style("visibility", "hidden");
-        currentElement = null;
-      } else {
-        let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
-        if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
-        if (d.comuna) tooltipText += "<br>" + d.comuna;
-        if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
-        tooltip
-          .style("visibility", "visible")
-          .style("top", (d3.event.pageY - 10) + "px")
-          .style("left", (d3.event.pageX + 10) + "px")
-          .html(tooltipText);
-        d3.select(this)
-          .style("opacity", 1);
-        currentElement = this;
+      d3.event.stopPropagation();
+      let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
+      if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
+      if (d.comuna) tooltipText += "<br>" + d.comuna;
+      if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
+      tooltip
+        .style("visibility", "visible")
+        .style("top", (d3.event.pageY - 10) + "px")
+        .style("left", (d3.event.pageX + 10) + "px")
+        .html(tooltipText);
+      if (currentElement) {
+        d3.select(currentElement).style("opacity", 1);
       }
+      d3.select(this)
+        .style("opacity", 0.5);
+      currentElement = this;
     });
 
   return svg.node();
   
 }
+
 
 ```
