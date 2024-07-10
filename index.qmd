@@ -140,26 +140,33 @@ map = {
     .on("mouseout", mouseout)
     .on("click", function (d) { 
       d3.event.stopPropagation();
-      let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
-      if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
-      if (d.comuna) tooltipText += "<br>" + d.comuna;
-      if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
-      tooltip
-        .style("visibility", "visible")
-        .style("top", (d3.event.pageY - 10) + "px")
-        .style("left", (d3.event.pageX + 10) + "px")
-        .html(tooltipText);
-      if (currentElement) {
-        d3.select(currentElement).style("opacity", 1);
+      if (tooltip.style("visibility") === "visible") {
+        tooltip.style("visibility", "hidden");
+        d3.select(this).style("opacity", 1);
+        currentElement = null;
+      } else {
+        let tooltipText = "<b>" + d.plaza + "</b><br><i><a href='" + d.google_maps + "' target='_blank'>Haz clic para abrir la ubicación en Google Maps</a></i>";
+        if (d.direccion) tooltipText += "<br>Dirección: " + d.direccion;
+        if (d.comuna) tooltipText += "<br>" + d.comuna;
+        if (d.mesas) tooltipText += "<br>Mesas: " + Math.round(d.mesas);
+        tooltip
+          .style("visibility", "visible")
+          .style("top", (d3.event.pageY - 10) + "px")
+          .style("left", (d3.event.pageX + 10) + "px")
+          .html(tooltipText);
+        if (currentElement) {
+          d3.select(currentElement).style("opacity", 1);
+        }
+        d3.select(this)
+          .style("opacity", 0.5);
+        currentElement = this;
       }
-      d3.select(this)
-        .style("opacity", 0.5);
-      currentElement = this;
     });
 
   return svg.node();
   
 }
+
 
 
 ```
